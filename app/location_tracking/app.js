@@ -19,6 +19,35 @@ const app = new PIXI.Application({
 
 document.getElementById('app').appendChild(app.view);
 
+const serverIncidents = [];
+const serverOfficers = [];
+
+async function fetchData() {
+  const {data} = await axios.get("http://localhost:5000")
+  const jsonData = data.map(item => JSON.parse(item));
+  console.log('khoa -> jsonData', jsonData)
+  jsonData.forEach(item => {
+    if (Boolean(item.incidentId)) {
+      serverIncidents.push({
+        id: item.incidentId,
+        codeName: item.codeName,
+        officerId: "foo",
+        loc: item.loc,
+      })
+    // Officer
+    } else {
+      serverOfficers.push({
+        id: item.officerId,
+        badgeName: item.badgeName,
+        loc: item.loc,
+      })
+    }
+    console.log('khoa -> serverOfficers', serverOfficers)
+    console.log('khoa -> serverIncidents', serverIncidents)
+  })
+}
+fetchData()
+
 function drawMap() {
   const graphics = new PIXI.Graphics();
 
@@ -145,7 +174,7 @@ async function loop() {
 
 const sampleIncidents = [
   { id: 1, codeName: "IC1", loc: { x: 5, y: 10 }, officerId: 1 },
-  { id: 2, codeName: "IC2", loc: { x: 15, y: 20 }, officerId: 3 },
+  { id: 2, codeName: "IC200", loc: { x: 15, y: 20 }, officerId: 3 },
   { id: 3, codeName: "IC3", loc: { x: 25, y: 20 }, officerId: 2 },
 ];
 
