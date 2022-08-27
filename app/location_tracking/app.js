@@ -23,6 +23,8 @@ let serverIncidents = [];
 let serverOfficers = [];
 
 async function fetchData() {
+    serverIncidents = []
+    serverOfficers = []
     const {data} = await axios.get("http://localhost:5000")
     const jsonData = data.map(item => JSON.parse(item));
     console.log('khoa -> jsonData', jsonData)
@@ -32,7 +34,7 @@ async function fetchData() {
                 serverIncidents.push({
                     id: item.incidentId,
                     codeName: item.codeName,
-                    officerId: "foo",
+                    officerId: 3,
                     loc: item.loc,
                 })
             }
