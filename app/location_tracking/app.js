@@ -17,7 +17,7 @@ const app = new PIXI.Application({
   backgroundColor: 0x000000,
 });
 
-document.getElementById('app').appendChild(app.view);
+document.getElementById("app").appendChild(app.view);
 
 function drawMap() {
   const graphics = new PIXI.Graphics();
@@ -91,14 +91,8 @@ function drawAssignLines(incidents, officers) {
 
   incidents.forEach((incident) => {
     const officer = officers.find((o) => o.id === incident.officerId);
-    graphics.moveTo(
-      incident.loc.x * UNIT_WIDTH,
-      incident.loc.y * UNIT_HEIGHT
-    );
-    graphics.lineTo(
-      officer.loc.x,
-      officer.loc.y
-    );
+    graphics.moveTo(incident.loc.x * UNIT_WIDTH, incident.loc.y * UNIT_HEIGHT);
+    graphics.lineTo(officer.loc.x, officer.loc.y);
   });
 
   app.stage.addChild(graphics);
@@ -156,6 +150,8 @@ const sampleOfficers = [
 ];
 
 async function loadData() {
+  const dataResponse = await fetchData();
+  console.log(dataResponse, "dataResponse");
   return {
     data: {
       incidents: sampleIncidents,
@@ -163,6 +159,12 @@ async function loadData() {
     },
     error: null,
   };
+}
+
+async function fetchData() {
+  let request = await fetch("http://localhost:5000/api/v1/state");
+  request = await request.json();
+  return request;
 }
 
 start();
