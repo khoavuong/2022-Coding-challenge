@@ -70,7 +70,7 @@ async function fetchData() {
                 result.id = serverOfficers[i].id;
             }
         }
-        return {...incident, officerId: result.id};
+        return {...incident};
     })
 }
 
