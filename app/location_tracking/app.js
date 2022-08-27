@@ -29,7 +29,7 @@ async function fetchData() {
     jsonData.forEach(item => {
         if (Boolean(item.incidentId)) {
             if (item.type === "IncidentOccurred") {
-                serverIncidents = serverIncidents.push({
+                serverIncidents.push({
                     id: item.incidentId,
                     codeName: item.codeName,
                     officerId: "foo",
@@ -38,7 +38,7 @@ async function fetchData() {
             }
 
             if (item.type === "IncidentResolved") {
-                serverIncidents.filter(incident => incident.id !== item.incidentId);
+                serverIncidents = serverIncidents.filter(incident => incident.id !== item.incidentId);
             }
             // Officer
         } else {
@@ -58,12 +58,8 @@ async function fetchData() {
                 serverOfficers = serverOfficers.filter(officer => officer.id !== item.officerId)
             }
         }
-        console.log('khoa -> serverOfficers', serverOfficers)
-        console.log('khoa -> serverIncidents', serverIncidents)
     })
 }
-
-fetchData()
 
 function drawMap() {
     const graphics = new PIXI.Graphics();
@@ -202,10 +198,15 @@ const sampleOfficers = [
 ];
 
 async function loadData() {
+    await fetchData()
+    console.log('khoa -> sampleIncidents', sampleIncidents)
+    console.log('khoa -> sampleOfficers', sampleOfficers)
+    console.log('khoa -> serverOfficers', serverOfficers)
+    console.log('khoa -> serverIncidents', serverIncidents)
     return {
         data: {
-            incidents: sampleIncidents,
-            officers: sampleOfficers,
+            incidents: serverIncidents,
+            officers: serverOfficers,
         },
         error: null,
     };
