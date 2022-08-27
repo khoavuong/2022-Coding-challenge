@@ -34,7 +34,7 @@ async function fetchData() {
                 serverIncidents.push({
                     id: item.incidentId,
                     codeName: item.codeName,
-                    officerId: 3,
+                    officerId: 2,
                     loc: item.loc,
                 })
             }
@@ -60,6 +60,17 @@ async function fetchData() {
                 serverOfficers = serverOfficers.filter(officer => officer.id !== item.officerId)
             }
         }
+    })
+    serverIncidents = serverIncidents.map(incident => {
+        let result = {min: 999999, id: null};
+        for (let i = 0; i < serverOfficers.length; i++) {
+            const range = Math.abs(incident.x - serverOfficers[i].x)**2 + Math.abs(incident.y - serverOfficers[i].y)**2;
+            if (range < result.min) {
+                result.min = range
+                result.id = serverOfficers[i].id;
+            }
+        }
+        return {...incident, officerId: result.id};
     })
 }
 
@@ -140,8 +151,8 @@ function drawAssignLines(incidents, officers) {
             incident.loc.y * UNIT_HEIGHT
         );
         graphics.lineTo(
-            officer.loc.x,
-            officer.loc.y
+            officer.loc.x * UNIT_WIDTH,
+            officer.loc.y * UNIT_HEIGHT
         );
     });
 
