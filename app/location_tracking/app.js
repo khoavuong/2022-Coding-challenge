@@ -64,6 +64,7 @@ async function fetchData() {
     serverIncidents = serverIncidents.map(incident => {
         let result = {min: 999999, id: null};
         for (let i = 0; i < serverOfficers.length; i++) {
+            if (serverOfficers[i].isAssigned) continue;
             const range = (incident.loc.x - serverOfficers[i].loc.x)**2 + (incident.loc.y - serverOfficers[i].loc.y)**2;
             console.log('khoa -> range', range)
             if (range < result.min) {
@@ -71,6 +72,7 @@ async function fetchData() {
                 result.id = serverOfficers[i].id;
             }
         }
+        serverOfficers.find(officer => officer.id === result.id).isAssigned = true;
         return {...incident, officerId: result.id};
     })
     console.log('khoa -> serverIncidents', serverIncidents)
